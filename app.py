@@ -30,16 +30,15 @@ with st.form("formulario_prediccion"):
 
     with col2:
         tipo_plan_comidas = st.selectbox("Tipo de plan de comidas", ["Meal Plan 1", "Meal Plan 2", "Meal Plan 3", "Not Selected"])
-        requiere_parqueadero = st.selectbox("¿Requiere parqueadero?", [0, 1])
+        requiere_parqueadero_texto = st.selectbox("¿Requiere parqueadero?", ["No", "Sí"])
         tipo_habitación_reservada = st.selectbox("Tipo de habitación", ["Room_Type 1", "Room_Type 2", "Room_Type 3", "Room_Type 4", "Room_Type 5", "Room_Type 6", "Room_Type 7"])
         antelación_reserva = st.slider("Antelación de la reserva (días)", 0, 500, 50)
 
     with col3:
-        año_llegada = st.selectbox("Año de llegada", [2017])  # fijo en dataset
         mes_llegada = st.slider("Mes de llegada", 1, 12, 6)
         día_llegada = st.slider("Día de llegada", 1, 31, 15)
         tipo_segmento_mercado = st.selectbox("Segmento de mercado", ["Online", "Offline", "Corporate", "Complementary", "Aviation"])
-        huésped_recurrente = st.selectbox("¿Huésped recurrente?", [0, 1])
+        huésped_recurrente_texto = st.selectbox("¿Huésped recurrente?", ["No", "Sí"])
         num_cancelaciones_previas = st.slider("Cancelaciones previas", 0, 10, 0)
         num_reservas_previas_no_canceladas = st.slider("Reservas previas no canceladas", 0, 10, 0)
         precio_promedio_por_habitación = st.number_input("Precio promedio por habitación", 0.0, 500.0, 100.0)
@@ -48,6 +47,11 @@ with st.form("formulario_prediccion"):
     enviar = st.form_submit_button("📊 Predecir cancelación")
 
 if enviar:
+    # Conversión de campos texto a valores numéricos esperados por el modelo
+    requiere_parqueadero = 1 if requiere_parqueadero_texto == "Sí" else 0
+    huésped_recurrente = 1 if huésped_recurrente_texto == "Sí" else 0
+    año_llegada = 2017  # Valor quemado
+
     # Crear DataFrame de una sola fila
     datos = pd.DataFrame({
         "num_adultos": [num_adultos],
